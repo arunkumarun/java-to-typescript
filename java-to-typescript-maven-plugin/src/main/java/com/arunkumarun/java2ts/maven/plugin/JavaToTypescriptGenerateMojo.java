@@ -10,6 +10,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +27,8 @@ import java.util.List;
         threadSafe = true
 )
 public final class JavaToTypescriptGenerateMojo extends AbstractMojo {
+    private static final Logger logger = LoggerFactory.getLogger(JavaToTypescriptGenerateMojo.class);
+
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
@@ -33,7 +37,7 @@ public final class JavaToTypescriptGenerateMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        System.out.println("===============================> Start JavaToTypescriptGenerateMojo Execute <===============================");
+        logger.info("==============> Start JavaToTypescriptGenerateMojo Execute <==============");
         try {
             List<URL> urls = new ArrayList<>();
 
@@ -48,6 +52,6 @@ public final class JavaToTypescriptGenerateMojo extends AbstractMojo {
         } catch (DependencyResolutionRequiredException | IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("===============================> End JavaToTypescriptGenerateMojo Execute <===============================");
+        logger.info("==============> End JavaToTypescriptGenerateMojo Execute <==============");
     }
 }

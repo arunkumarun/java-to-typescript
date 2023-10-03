@@ -1,25 +1,35 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.arunkumarun</groupId>
-  <artifactId>java-to-typescript</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+    <groupId>com.arunkumarun</groupId>
+    <artifactId>java-to-typescript</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-  <name>java-to-typescript</name>
+    <name>java-to-typescript</name>
 
-  <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-  <modules>
-    <module>java-to-typescript-core</module>
-      <module>java-to-typescript-maven-plugin</module>
-  </modules>
+        <version.io.github.classgraph>4.8.161</version.io.github.classgraph>
+        <version.org.freemarker>2.3.32</version.org.freemarker>
+        <version.org.slf4j>2.0.9</version.org.slf4j>
 
-  <dependencies>
-  </dependencies>
+        <version.maven.core>3.9.4</version.maven.core>
+        <version.maven.plugin.annotations>3.9.0</version.maven.plugin.annotations>
+
+        <!-- Plugins -->
+        <version.maven.plugin.plugin>3.9.0</version.maven.plugin.plugin>
+    </properties>
+
+    <modules>
+        <module>java-to-typescript-core</module>
+        <module>java-to-typescript-maven-plugin</module>
+    </modules>
+
+    <dependencies>
+    </dependencies>
 </project>

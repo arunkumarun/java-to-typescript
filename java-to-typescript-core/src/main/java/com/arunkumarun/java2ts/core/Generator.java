@@ -10,6 +10,8 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URLClassLoader;
@@ -19,6 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Generator {
+    private static final Logger logger = LoggerFactory.getLogger(Generator.class);
     private static final Map<String, String> typescriptFieldTypeMap = Map.ofEntries(
             Map.entry(Integer.class.getName(), "number"),
             Map.entry(Long.class.getName(), "number"),
@@ -26,14 +29,14 @@ public class Generator {
     );
 
     public static void generate(URLClassLoader classLoader, String outputDir) {
-        String packageName = "com.sample";
-
-        System.out.println("==========> " +packageName);
-
-        try (ScanResult scan = new ClassGraph().enableAllInfo().overrideClasspath((Object[]) classLoader.getURLs()).acceptPackages(packageName).ignoreClassVisibility().scan()) {
+        try (ScanResult scan = new ClassGraph()
+                .enableAllInfo()
+                .overrideClasspath((Object[]) classLoader.getURLs())
+                .ignoreClassVisibility()
+                .scan()) {
             ClassInfoList classes = scan.getAllClasses();
 
-            System.out.println("==========> Classes " + classes.size());
+            logger.info("Classes Size: {}", classes.size());
 
             List<TsClass> tsClasses = classes.stream().map(Generator::generateTSClass).toList();
 

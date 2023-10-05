@@ -16,6 +16,7 @@
 
         <version.io.github.classgraph>4.8.161</version.io.github.classgraph>
         <version.org.freemarker>2.3.32</version.org.freemarker>
+        <version.fasterxml.jackson>2.15.2</version.fasterxml.jackson>
         <version.org.slf4j>2.0.9</version.org.slf4j>
 
         <version.maven.core>3.9.4</version.maven.core>

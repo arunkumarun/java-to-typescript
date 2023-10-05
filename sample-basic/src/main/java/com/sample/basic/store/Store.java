@@ -1,4 +1,4 @@
-package com.sample.store;
+package com.sample.basic.store;
 
 public class Store {
     private Integer id;

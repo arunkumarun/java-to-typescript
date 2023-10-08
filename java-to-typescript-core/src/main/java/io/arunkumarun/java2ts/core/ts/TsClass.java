@@ -1,4 +1,4 @@
-package com.arunkumarun.java2ts.core.ts;
+package io.arunkumarun.java2ts.core.ts;
 
 import java.util.List;
 

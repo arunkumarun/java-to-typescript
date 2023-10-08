@@ -1,4 +1,4 @@
-package com.sample.basic;
+package io.sample.basic;
 
 public class Author {
     private Integer id;

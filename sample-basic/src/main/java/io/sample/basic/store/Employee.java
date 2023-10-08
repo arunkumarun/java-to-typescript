@@ -1,4 +1,4 @@
-package com.sample.basic.store;
+package io.sample.basic.store;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

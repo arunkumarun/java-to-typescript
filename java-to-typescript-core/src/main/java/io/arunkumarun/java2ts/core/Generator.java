@@ -1,7 +1,7 @@
-package com.arunkumarun.java2ts.core;
+package io.arunkumarun.java2ts.core;
 
-import com.arunkumarun.java2ts.core.ts.TsClass;
-import com.arunkumarun.java2ts.core.ts.TsField;
+import io.arunkumarun.java2ts.core.ts.TsClass;
+import io.arunkumarun.java2ts.core.ts.TsField;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +46,7 @@ public class Generator {
         try (ScanResult scan = new ClassGraph()
                 .enableAllInfo()
                 .addClassLoader(classLoader)
-                .acceptPackages("com.sample")
+                .acceptPackages("io.sample")
                 .ignoreClassVisibility()
                 .scan()) {
             ClassInfoList classes = scan.getAllClasses();

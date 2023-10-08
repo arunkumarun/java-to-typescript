@@ -1,6 +1,6 @@
-package com.arunkumarun.java2ts.maven.plugin;
+package io.arunkumarun.java2ts.maven.plugin;
 
-import com.arunkumarun.java2ts.core.Generator;
+import io.arunkumarun.java2ts.core.Generator;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;

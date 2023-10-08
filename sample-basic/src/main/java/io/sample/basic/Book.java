@@ -1,4 +1,4 @@
-package com.sample.basic;
+package io.sample.basic;
 
 public class Book {
     private Integer id;

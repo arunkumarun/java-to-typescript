@@ -2,16 +2,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.sample</groupId>
-    <artifactId>sample-basic</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <parent>
+        <groupId>com.arunkumarun</groupId>
+        <artifactId>java-to-typescript</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
+    <artifactId>sample-basic</artifactId>
+
+    <packaging>jar</packaging>
     <name>sample-basic</name>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -19,7 +21,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.15.2</version>
+            <version>${version.fasterxml.jackson}</version>
         </dependency>
     </dependencies>
 

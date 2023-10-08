@@ -29,6 +29,8 @@
     <modules>
         <module>java-to-typescript-core</module>
         <module>java-to-typescript-maven-plugin</module>
+
+        <module>sample-basic</module>
     </modules>
 
     <dependencies>

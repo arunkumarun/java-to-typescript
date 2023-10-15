@@ -7,8 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="sample-basic" />
-        <module name="java-to-typescript-core" />
         <module name="java-to-typescript-maven-plugin" />
+        <module name="java-to-typescript-core" />
       </profile>
     </annotationProcessing>
   </component>

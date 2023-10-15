@@ -1,7 +1,5 @@
 package io.arunkumarun.java2ts.core;
 
-import io.arunkumarun.java2ts.core.ts.TsClass;
-import io.arunkumarun.java2ts.core.ts.TsField;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,8 +7,9 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import io.arunkumarun.java2ts.core.ts.TsClass;
+import io.arunkumarun.java2ts.core.ts.TsField;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ClassInfoList;
@@ -20,8 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
+import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.List;
@@ -32,33 +31,54 @@ import static java.util.Objects.isNull;
 
 public class Generator {
     private static final Logger logger = LoggerFactory.getLogger(Generator.class);
+    private final GeneratorConfiguration generatorConfiguration;
     private static final Map<String, String> typescriptFieldTypeMap = Map.ofEntries(
             Map.entry(Integer.class.getName(), "number"),
             Map.entry(Long.class.getName(), "number"),
             Map.entry(String.class.getName(), "string")
     );
 
-    public static void generate(URLClassLoader classLoader, String outputDir) {
+    public Generator(GeneratorConfiguration generatorConfiguration) {
+        this.generatorConfiguration = generatorConfiguration;
+    }
+
+    public void generate(GeneratorInput generatorInput, GeneratorOutput generatorOutput) {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.findAndRegisterModules();
+        mapper.registerModules(ObjectMapper.findModules(generatorConfiguration.getClassLoader()));
         mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector());
 
         try (ScanResult scan = new ClassGraph()
-                .enableAllInfo()
-                .addClassLoader(classLoader)
-                .acceptPackages("io.sample")
+                .ignoreParentClassLoaders()
+                .overrideClassLoaders(generatorConfiguration.getClassLoader())
+                //.overrideClasspath((Object[]) generatorConfiguration.getClassLoader().getURLs())
+                .acceptPackages(generatorInput.getIncludePackages().toArray(new String[0]))
                 .ignoreClassVisibility()
+                .enableAllInfo()
                 .scan()) {
+
+            List<URL> classpathURLs = scan.getClasspathURLs();
+            logger.info("Classpath URL Size: {}", classpathURLs.size());
+            for (URL classpathURL : classpathURLs) {
+                logger.info("Classpath URL: {}", classpathURL);
+            }
+
             ClassInfoList classes = scan.getAllClasses();
 
             logger.info("Classes Size: {}", classes.size());
 
             List<TsClass> tsClasses = classes.stream()
                     .map(classInfo -> {
-                        JavaType javaType = mapper.getTypeFactory().withClassLoader(classLoader).constructType(classInfo.loadClass());
-                        BeanDescription introspect = mapper.getSerializationConfig().introspect(javaType);
-                        List<BeanPropertyDefinition> properties = introspect.findProperties();
-                        return generateTSClass(classInfo, properties);
+                        try {
+                            //logger.info("Class Info: [{}]", classInfo);
+                            JavaType javaType = mapper.getTypeFactory()
+                                    .constructType(classInfo.loadClass());;
+                            BeanDescription introspect = mapper.getSerializationConfig().introspect(javaType);
+                            List<BeanPropertyDefinition> properties = introspect.findProperties();
+                            return generateTSClass(classInfo, properties);
+                        } catch (Exception e) {
+                            logger.error("Exception", e);
+                        }
+                        return null;
                     })
                     .toList();
 
@@ -66,7 +86,8 @@ public class Generator {
             model.put("tsClasses", tsClasses);
 
             for (ClassInfo clazz : classes) {
-                JavaType javaType = mapper.getTypeFactory().withClassLoader(classLoader).constructType(clazz.loadClass());
+                JavaType javaType = mapper.getTypeFactory()
+                        .constructType(clazz.loadClass());
                 BeanDescription introspect = mapper.getSerializationConfig().introspect(javaType);
                 List<BeanPropertyDefinition> properties = introspect.findProperties();
 
@@ -84,7 +105,7 @@ public class Generator {
             Template template = configuration.getTemplate("ts-class.ftl");
 
 
-            File outputFile = new File(new File(outputDir, "java-to-typescript"), "output.ts");
+            File outputFile = new File(new File(generatorOutput.getOutputDir(), "java-to-typescript"), "output.ts");
             boolean directoryCreated = outputFile.getParentFile().mkdirs();
             if (directoryCreated) logger.info("{} is created", outputFile.getParentFile().toString());
             /*Writer consoleWriter = new OutputStreamWriter(System.out);
@@ -92,7 +113,7 @@ public class Generator {
 
             Writer fileWriter = new FileWriter(outputFile);
             template.process(model, fileWriter);
-        } catch (IOException | TemplateException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
